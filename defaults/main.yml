@@ -2,7 +2,7 @@
 # A list of additional volumes to mount into the docker container.  This is
 # useful for things like SSL certificates.
 radio_bridge_volumes: []
-# - "/some/directory:/some/mount:ro"
+# - "/some/directory:/some/mount"
 # - "/some/file.yml:/some/mount/file.yml:ro"
 
 # A key/value set of environment variables and their values, which will be

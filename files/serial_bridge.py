@@ -42,6 +42,32 @@ def parse_message(line: str) -> dict:
     return data
 
 
+def define_auth_info(mqtt_user, mqtt_password):
+    mqtt_auth_info = {}
+
+    if mqtt_user:
+        mqtt_auth_info['username'] = mqtt_user
+    if mqtt_password:
+        mqtt_auth_info['password'] = mqtt_password
+
+    if not mqtt_auth_info:
+        mqtt_auth_info = None
+
+    return mqtt_auth_info
+
+
+def define_tls_info(mqtt_ca_certs):
+    mqtt_tls_info = {}
+
+    if mqtt_ca_certs:
+        mqtt_tls_info['ca_certs'] = mqtt_ca_certs
+
+    if not mqtt_tls_info:
+        mqtt_tls_info = None
+
+    return mqtt_tls_info
+
+
 @click.command()
 @click.option('--device', envvar='BRIDGE_SERIAL_DEVICE', type=click.Path(), default="/dev/tty99")
 @click.option('--mqtt-host', envvar='BRIDGE_MQTT_HOST')
@@ -51,19 +77,9 @@ def parse_message(line: str) -> dict:
 @click.option('--mqtt-ca-certs', envvar='BRIDGE_MQTT_CA_CERTS', type=click.Path(), default=None)
 def main(device, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_ca_certs):
 
-    mqtt_auth_info = {}
-    if mqtt_user:
-        mqtt_auth_info['username'] = mqtt_user
-    if mqtt_password:
-        mqtt_auth_info['password'] = mqtt_password
-    if not mqtt_auth_info:
-        mqtt_auth_info = None
+    mqtt_auth_info = define_auth_info(mqtt_user, mqtt_password)
 
-    mqtt_tls_info = {}
-    if mqtt_ca_certs:
-        mqtt_tls_info['ca_certs'] = mqtt_ca_certs
-    if not mqtt_tls_info:
-        mqtt_tls_info = None
+    mqtt_tls_info = define_tls_info(mqtt_ca_certs)
 
     print("Initializing serial port {}".format(device), flush=True)
 
