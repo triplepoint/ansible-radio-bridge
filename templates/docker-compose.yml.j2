@@ -6,10 +6,12 @@ services:
     image: "radio-bridge:latest"
     container_name: "radio-bridge"
     restart: always
+{% if radio_bridge_volumes %}
     volumes:
 {% for vol in radio_bridge_volumes %}
       - {{ vol }}
 {% endfor %}
+{% endif %}
 {% if radio_bridge_environment_variables %}
     environment:
 {% for k, v in radio_bridge_environment_variables.items() %}

@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  role_name: radio_bridge
+  author: Jonathan Hanson
+  description: A simple dockerized Python script which publishes serial messages as MQTT events.
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+  galaxy_tags:
+    - mqtt
+dependencies: []
