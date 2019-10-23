@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  radio-bridge:
+    build:
+      context: /opt/ansible-docker-compose/radio-bridge
+    image: "radio-bridge:latest"
+    container_name: "radio-bridge"
+    restart: always
+{% if radio_bridge_environment_variables %}
+    environment:
+{% for k, v in radio_bridge_environment_variables.items() %}
+      - {{ k }}={{ v }}
+{% endfor %}
+{% endif %}
+    devices:
+     - "{{ radio_bridge_environment_variables['BRIDGE_SERIAL_DEVICE'] }}:{{ radio_bridge_environment_variables['BRIDGE_SERIAL_DEVICE'] }}"

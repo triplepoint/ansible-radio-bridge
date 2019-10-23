@@ -1,0 +1,31 @@
+---
+- name: Ensure Docker-related Python packages are present
+  pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: Ensure the docker-compose template directory exists
+  file:
+    state: directory
+    path: "/opt/ansible-docker-compose/radio-bridge"
+
+- name: Ensure the Dockerfile and related files are all present
+  copy:
+    src: "{{ item }}"
+    dest: "/opt/ansible-docker-compose/radio-bridge/{{ item }}"
+  with_items:
+    - Dockerfile
+    - Pipfile
+    - Pipfile.lock
+    - serial_bridge.py
+
+- name: Ensure this service's docker-compose template is present
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/ansible-docker-compose/radio-bridge/docker-compose.yml
+
+- name: Ensure the service container(s) is/are started
+  docker_compose:
+    project_src: /opt/ansible-docker-compose/radio-bridge
+    build: yes
