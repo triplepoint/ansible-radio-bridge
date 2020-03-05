@@ -56,7 +56,7 @@ def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info:
         data = parse_message(line)
     except json.JSONDecodeError:
         print("Error reading message as JSON, skipping: {}".format(line), flush=True)
-        continue
+        return
     data['_timestamp'] = datetime.now(timezone.utc).timestamp()
     json_data = json.dumps(data)
 
