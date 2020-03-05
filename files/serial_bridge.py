@@ -14,7 +14,7 @@ import json
 import os
 from datetime import datetime, timezone
 from itertools import islice
-from typing import Option
+from typing import Optional
 
 import click
 import paho.mqtt.publish as publish
@@ -49,7 +49,7 @@ def parse_message(line: str) -> dict:
     return data
 
 
-def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info: Option[dict, None], mqtt_tls_info: Option[dict, None]):
+def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info: Optional[dict], mqtt_tls_info: Optional[dict]):
     # Parse the serial message into a data structure suitable
     # for publishing
     try:
