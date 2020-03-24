@@ -11,9 +11,7 @@ But that's a battle for another day.
 """
 
 import json
-import os
 from datetime import datetime, timezone
-from itertools import islice
 from typing import Optional
 
 import click
@@ -49,7 +47,8 @@ def parse_message(line: str) -> dict:
     return data
 
 
-def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info: Optional[dict], mqtt_tls_info: Optional[dict]):
+def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info: Optional[dict],
+                      mqtt_tls_info: Optional[dict]):
     # Parse the serial message into a data structure suitable
     # for publishing
     try:
@@ -65,8 +64,8 @@ def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info:
     # Publish the message to the MQTT broker
     mqtt_topic = "home/radio/client{}".format(data['_sender_id'])
     publish.single(mqtt_topic, json_data, hostname=mqtt_host,
-        port=mqtt_port, auth=mqtt_auth_info, tls=mqtt_tls_info,
-        keepalive=30)
+                   port=mqtt_port, auth=mqtt_auth_info, tls=mqtt_tls_info,
+                   keepalive=30)
 
     print("Publish complete.", flush=True)
 
