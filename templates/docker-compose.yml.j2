@@ -3,6 +3,8 @@ services:
   radio-bridge:
     build:
       context: /opt/ansible-docker-compose/radio-bridge
+      args:
+        UID_GID: "{{ radio_bridge_uid_gid }}"
     image: "radio-bridge:latest"
     container_name: "radio-bridge"
     restart: always

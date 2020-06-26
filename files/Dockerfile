@@ -1,5 +1,11 @@
-FROM python:3.8
+FROM python:3.8-alpine
 LABEL maintainer="Jonathan Hanson <jonathan@jonathan-hanson.org>"
+
+ARG UID_GID=1066
+
+RUN addgroup -g $UID_GID app \
+    && adduser -u $UID_GID -S -D -G app -s /usr/sbin/nologin app \
+    && adduser app dialout
 
 WORKDIR /usr/src/app
 
@@ -11,6 +17,8 @@ RUN pip install --no-cache-dir --upgrade \
 
 COPY Pipfile ./
 COPY Pipfile.lock ./
+
+USER app
 
 RUN pipenv install --deploy
 

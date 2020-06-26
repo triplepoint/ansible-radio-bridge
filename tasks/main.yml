@@ -5,6 +5,18 @@
       - docker
       - docker-compose
 
+- name: Ensure the container user group exists
+  group:
+    name: "radio-bridge"
+    gid: "{{ radio_bridge_uid_gid }}"
+    state: present
+
+- name: Ensure the container user exists
+  user:
+    name: "radio-bridge"
+    uid: "{{ radio_bridge_uid_gid }}"
+    group: "radio-bridge"
+
 - name: Ensure the docker-compose template directory exists
   file:
     state: directory

@@ -1,4 +1,8 @@
 ---
+# The User ID and Group ID of the process in the container
+# Note that this user and group will be created on the host
+radio_bridge_uid_gid: 1066
+
 # A list of additional volumes to mount into the docker container.  This is
 # useful for things like SSL certificates.
 radio_bridge_volumes: []
