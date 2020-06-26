@@ -8,14 +8,19 @@
 - name: Ensure the container user group exists
   group:
     name: "radio-bridge"
-    gid: "{{ radio_bridge_uid_gid }}"
     state: present
+    gid: "{{ radio_bridge_uid_gid }}"
+    system: yes
 
 - name: Ensure the container user exists
   user:
     name: "radio-bridge"
+    state: present
     uid: "{{ radio_bridge_uid_gid }}"
     group: "radio-bridge"
+    create_home: no
+    system: yes
+    shell: "/usr/sbin/nologin"
 
 - name: Ensure the docker-compose template directory exists
   file:
