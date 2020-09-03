@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 RUN pip install --no-cache-dir --upgrade \
     pip \
     pipenv \
-    setuptools \
+    setuptools<50 \
     wheel
 
 COPY Pipfile ./
