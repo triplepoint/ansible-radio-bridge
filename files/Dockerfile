@@ -10,10 +10,10 @@ RUN addgroup -g $UID_GID app \
 WORKDIR /usr/src/app
 
 RUN pip install --no-cache-dir --upgrade \
-    pip \
-    pipenv \
-    setuptools<50 \
-    wheel
+    'pip' \
+    'pipenv' \
+    'setuptools<50' \
+    'wheel'
 
 COPY Pipfile ./
 COPY Pipfile.lock ./
