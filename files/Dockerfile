@@ -1,4 +1,4 @@
-FROM python:3.8-alpine
+FROM python:3.9-alpine
 LABEL maintainer="Jonathan Hanson <jonathan@jonathan-hanson.org>"
 
 ARG UID_GID=1066
@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 RUN pip install --no-cache-dir --upgrade \
     'pip' \
     'pipenv' \
-    'setuptools<50' \
+    'setuptools' \
     'wheel'
 
 COPY Pipfile ./
