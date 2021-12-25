@@ -42,6 +42,13 @@
     src: docker-compose.yml.j2
     dest: /opt/ansible-docker-compose/radio-bridge/docker-compose.yml
 
+- name: Ensure the latest images for the upstream container
+  community.docker.docker_image:
+    name: "python"
+    source: pull
+    force_source: yes
+    tag: "3.9-alpine"
+
 - name: Ensure the service container(s) is/are started
   docker_compose:
     project_src: /opt/ansible-docker-compose/radio-bridge
