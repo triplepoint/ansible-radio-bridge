@@ -20,6 +20,7 @@
   file:
     state: directory
     path: "/opt/ansible-docker-compose/radio-bridge"
+    mode: 0755
 
 - name: Ensure the Dockerfile and related files are all present
   copy:
