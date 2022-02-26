@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: radio_bridge
+  namespace: triplepoint
   author: Jonathan Hanson
   description: A simple dockerized Python script which publishes serial messages as MQTT events.
   license: MIT
