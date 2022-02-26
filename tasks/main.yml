@@ -36,6 +36,7 @@
   template:
     src: docker-compose.yml.j2
     dest: /opt/ansible-docker-compose/radio-bridge/docker-compose.yml
+    mode: 0644
 
 - name: Ensure the latest images for the upstream container
   community.docker.docker_image:
