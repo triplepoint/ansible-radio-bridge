@@ -4,7 +4,7 @@
     name: "radio-bridge"
     state: present
     gid: "{{ radio_bridge_uid_gid }}"
-    system: yes
+    system: true
 
 - name: Ensure the container user exists
   user:
@@ -12,8 +12,8 @@
     state: present
     uid: "{{ radio_bridge_uid_gid }}"
     group: "radio-bridge"
-    create_home: no
-    system: yes
+    create_home: false
+    system: true
     shell: "/usr/sbin/nologin"
 
 - name: Ensure the docker-compose template directory exists
@@ -26,6 +26,7 @@
   copy:
     src: "{{ item }}"
     dest: "/opt/ansible-docker-compose/radio-bridge/{{ item }}"
+    mode: 0644
   with_items:
     - Dockerfile
     - Pipfile
@@ -42,10 +43,10 @@
   community.docker.docker_image:
     name: "python"
     source: pull
-    force_source: yes
+    force_source: true
     tag: "3.9-alpine"
 
 - name: Ensure the service container(s) is/are started
   docker_compose:
     project_src: /opt/ansible-docker-compose/radio-bridge
-    build: yes
+    build: true
