@@ -12,14 +12,19 @@ But that's a battle for another day.
 
 import json
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Any, Dict, Optional, TypedDict
 
 import click
 import paho.mqtt.publish as publish
 import serial
 
 
-def parse_message(line: str) -> dict:
+class PayloadType(TypedDict):
+    _sender_id: int
+    _rssi: int
+    msg: str
+
+def parse_message(line: str) -> Dict[str, Any]:
     """
     Given a string that looks like json with
     a 'msg' element in it, remove the msg element
@@ -31,10 +36,9 @@ def parse_message(line: str) -> dict:
     would produce a return dict like:
       {'one': 'fish', 'two': 'fish', 'red': 'fish', 'poop': 'fish'}
     """
-    data = json.loads(line)
+    data: PayloadType = json.loads(line)
+    output = {key: value for key, value in data.items() if key != "msg"}
     message = data['msg']
-    del data['msg']
-
     elements = message.split()
     while elements:
         key = elements.pop(0)
@@ -42,27 +46,30 @@ def parse_message(line: str) -> dict:
             value = elements.pop(0)
         else:
             value = ""
-        data[key] = value
+        output[key] = value
 
-    return data
+    return output
 
 
-def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info: Optional[dict],
-                      mqtt_tls_info: Optional[dict]):
-    # Parse the serial message into a data structure suitable
-    # for publishing
+def parse_and_publish(line: str, mqtt_host: str, mqtt_port: int, mqtt_auth_info: Optional[Dict[str, str]],
+                      mqtt_tls_info: Optional[Dict[str, str]]) -> None:
+    # Parse the serial message into a data structure suitable for publishing
     try:
         data = parse_message(line)
     except json.JSONDecodeError:
         print("Error reading message as JSON, skipping: {}".format(line), flush=True)
         return
-    data['_timestamp'] = datetime.now(timezone.utc).timestamp()
-    json_data = json.dumps(data)
 
+    data['_timestamp'] = datetime.now(timezone.utc).timestamp()
+
+    mqtt_topic = "home/radio/client{}".format(data['_sender_id'])
+    if "ST" in data:
+        mqtt_topic = f"{mqtt_topic}/{data['ST']}"
+        del data["ST"]
+
+    json_data = json.dumps(data)
     print(json_data, flush=True)
 
-    # Publish the message to the MQTT broker
-    mqtt_topic = "home/radio/client{}".format(data['_sender_id'])
     publish.single(mqtt_topic, json_data, hostname=mqtt_host,
                    port=mqtt_port, auth=mqtt_auth_info, tls=mqtt_tls_info,
                    keepalive=30)
