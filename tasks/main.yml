@@ -1,13 +1,13 @@
 ---
 - name: Ensure the container user group exists
-  group:
+  ansible.builtin.group:
     name: "radio-bridge"
     state: present
     gid: "{{ radio_bridge_uid_gid }}"
     system: true
 
 - name: Ensure the container user exists
-  user:
+  ansible.builtin.user:
     name: "radio-bridge"
     state: present
     uid: "{{ radio_bridge_uid_gid }}"
@@ -17,13 +17,13 @@
     shell: "/usr/sbin/nologin"
 
 - name: Ensure the docker-compose template directory exists
-  file:
+  ansible.builtin.file:
     state: directory
     path: "/opt/ansible-docker-compose/radio-bridge"
     mode: 0755
 
 - name: Ensure the Dockerfile and related files are all present
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/opt/ansible-docker-compose/radio-bridge/{{ item }}"
     mode: 0644
@@ -34,7 +34,7 @@
     - serial_bridge.py
 
 - name: Ensure this service's docker-compose template is present
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: /opt/ansible-docker-compose/radio-bridge/docker-compose.yml
     mode: 0644
