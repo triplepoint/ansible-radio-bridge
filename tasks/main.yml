@@ -47,6 +47,6 @@
     tag: "3.9-alpine"
 
 - name: Ensure the service container(s) is/are started
-  docker_compose:
+  community.docker.docker_compose:
     project_src: /opt/ansible-docker-compose/radio-bridge
     build: true
